@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
@@ -25,14 +24,15 @@ import java.util.concurrent.TimeUnit;
 @RestController
 public class SsoController {
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String,String> redisTemplate;
     @Autowired
     private UserService userService;
 
     @RequestMapping("login")
     public ResponseResult userLogin(@RequestBody Map<String, Object> map) throws LoginException {
         ResponseResult responseResult = new ResponseResult();
-        String code = (String) redisTemplate.opsForValue().get(map.get("codekey").toString());//获取生成的验证码
+        String code = redisTemplate.opsForValue().get(map.get("codekey").toString());//获取生成的验证码
+        System.out.println(code);
         if(code==null||!code.equals(map.get("code").toString())){   //作比较
             responseResult.setCode(500);
             responseResult.setError("验证码错误,请重新刷新页面登陆");
@@ -70,8 +70,8 @@ public class SsoController {
         responseResult.setResult(code);     //将生成的code存进去自定义类里面
 
         String uuid16 = "CODE"+UID.getUUID16(); //利用UUID工具生成唯一共识的唯一ID
-        redisTemplate.opsForSet().add(uuid16,code); //将UUID和5位随机数存进redis以便后续的验证
-        redisTemplate.expire(uuid16,1, TimeUnit.MINUTES);   //存进Redis的值之后，设置保存时间
+        redisTemplate.opsForValue().set(uuid16,code);//将UUID和5位随机数存进redis以便后续的验证
+        redisTemplate.expire(uuid16,5, TimeUnit.MINUTES);   //存进Redis的值之后，设置保存时间
         Cookie cookie = new Cookie("authcode",uuid16);  //uuid16是存进去Redis的5位随机数的Key值，后续通过获取这个值就可以获取Redis里面的5位随机数，进行验证
         cookie.setPath("/");
         cookie.setDomain("localhost");
