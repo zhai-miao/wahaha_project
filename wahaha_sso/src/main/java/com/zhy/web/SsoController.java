@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
@@ -61,6 +62,17 @@ public class SsoController {
             }
         }
         throw new LoginException("用户名或密码错误");
+    }
+
+    @RequestMapping("loginOut")
+    public ResponseResult loginOut(@RequestBody Map<String,Object> map){
+        String userid = map.get("userid").toString();
+        System.out.println("用户ID是:"+userid);
+        redisTemplate.delete("USERINFO"+userid.toString());
+        redisTemplate.delete("USERDATAAUTH"+userid.toString());
+        ResponseResult responseResult = new ResponseResult();
+        responseResult.setCode(200);
+        return responseResult;
     }
     @RequestMapping("getCode")
     public ResponseResult getCode(HttpServletResponse response, HttpServletRequest request){

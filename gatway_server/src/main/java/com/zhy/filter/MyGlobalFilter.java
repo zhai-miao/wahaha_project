@@ -26,7 +26,7 @@ public class MyGlobalFilter implements GlobalFilter {       //全局的过滤器
     @Value("${my.auth.urls}")        //其他的一些路径
     private String[] urls;
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String,String> redisTemplate;
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();  //获取请求
@@ -55,7 +55,9 @@ public class MyGlobalFilter implements GlobalFilter {       //全局的过滤器
                 return exchange.getResponse().setComplete();
             }
             String userId = jsonObject.get("id").toString();    //获取用户的ID
+            System.out.println("当前用户ID是:"+userId+",当前路径是:"+currentPath);
             //重Redis中取值看是否有当前路径的访问权限
+
             Boolean aBoolean = redisTemplate.opsForHash().hasKey("USERDATAAUTH" + userId, currentPath);
             if(aBoolean){
                 return chain.filter(exchange);

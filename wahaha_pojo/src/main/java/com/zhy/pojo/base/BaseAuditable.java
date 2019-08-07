@@ -25,7 +25,7 @@ public abstract class BaseAuditable {
     @Column(name="createTime")
     Date createTime;
 
-    @Version
+    /*@Version*/
     @Column(name = "version")
     private Long version;
 }

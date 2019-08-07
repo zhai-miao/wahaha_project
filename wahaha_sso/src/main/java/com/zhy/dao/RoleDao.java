@@ -4,6 +4,8 @@ import com.zhy.pojo.entity.RoleInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 /**
  * 作者: LCG
  * 日期: 2019/8/5 00:24

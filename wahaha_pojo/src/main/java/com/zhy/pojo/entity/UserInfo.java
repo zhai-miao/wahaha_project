@@ -3,10 +3,8 @@ package com.zhy.pojo.entity;
 import com.zhy.pojo.base.BaseAuditable;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +18,14 @@ import java.util.Map;
 @Table(name = "base_user")
 public class UserInfo extends BaseAuditable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "version")
+    private Long version;
+
     @Column(name = "userName")
    private String userName;
 
@@ -32,17 +38,30 @@ public class UserInfo extends BaseAuditable {
     @Column(name = "tel")
    private String tel;
 
+    @Column(name = "createTime")
+    private Date createTime;
+
+    @Column(name = "updateTime")
+    private Date updateTime;
+
     @Column(name = "sex")
    private int sex;
 
     @Column(name = "parentId")
     private Long parentId;
 
+    @Column(name = "delStatus")
+    private Integer delStatus;
+
+    @Column(name = "photoUrl")
+    private String photoUrl;
+
     @Transient
     private List<MenuInfo> listMenuInfo;
 
     @Transient
     private RoleInfo roleInfo;
+    //private List<RoleInfo> roleInfo;
 
     @Transient
     private Map<String,String> authmap;

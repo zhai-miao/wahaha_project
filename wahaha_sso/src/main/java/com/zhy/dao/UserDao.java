@@ -19,5 +19,12 @@ public interface UserDao extends JpaRepository<UserInfo,Long> {
     @Query(value = "select * from base_user where loginName=?1",nativeQuery = true)
     public UserInfo findByLoginName(String loginName);
 
+    @Query(value = "SELECT * FROM base_role WHERE id in (SELECT roleId FROM base_user_role WHERE userId = ?1)",nativeQuery = true)
+    List<RoleInfo> findByUid(Integer uid);
+
+    UserInfo findById(Integer uid);
+
+    @Query(value = "delete from base_user where id = ?1",nativeQuery = true)
+    public void delByUidaa(Long uid);
 
 }
