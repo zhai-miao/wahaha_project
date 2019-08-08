@@ -3,10 +3,7 @@ package com.zhy.pojo.entity;
 import com.zhy.pojo.base.BaseAuditable;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -18,6 +15,11 @@ import java.util.List;
 @Data
 @Table(name = "base_menu")
 public class MenuInfo extends BaseAuditable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     @Column(name = "menuName")
     private String menuName;

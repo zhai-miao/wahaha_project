@@ -9,6 +9,7 @@
         <module name="gatway_server" />
         <module name="wahaha_common" />
         <module name="wahaha_pojo" />
+        <module name="wahaha_service" />
         <module name="wahaha_sso" />
       </profile>
     </annotationProcessing>

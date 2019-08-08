@@ -56,6 +56,9 @@ public class UserInfo extends BaseAuditable {
     @Column(name = "photoUrl")
     private String photoUrl;
 
+    /*@Transient
+    private Integer*/
+
     @Transient
     private List<MenuInfo> listMenuInfo;
 

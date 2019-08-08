@@ -13,6 +13,7 @@
         <module>wahaha_common</module>
         <module>wahaha_sso</module>
         <module>wahaha_pojo</module>
+        <module>wahaha_service</module>
     </modules>
 
     <dependencyManagement>

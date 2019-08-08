@@ -50,6 +50,7 @@ public class MyGlobalFilter implements GlobalFilter {       //全局的过滤器
                 response.getHeaders().set("token",token);
             }catch (JwtException e){
                 //报异常则证明已经失效，需要重新登陆，或者token信息是错误的信息，则跳转到登陆页面
+                System.out.println("token已经失效或没携带token，需要重新登陆");
                 response.getHeaders().set("Location",loginPath);
                 response.setStatusCode(HttpStatus.SEE_OTHER);
                 return exchange.getResponse().setComplete();
