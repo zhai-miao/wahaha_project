@@ -21,6 +21,9 @@ public class RoleInfo extends BaseAuditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    public Long getId() {
+        return id;
+    }
 
     @Column(name = "roleName")
     private String roleName;
@@ -36,5 +39,8 @@ public class RoleInfo extends BaseAuditable {
 
     @Transient
     private List<MenuInfo> menuInfoList;
+
+    @Transient
+    private Object[] menuIds;
 
 }

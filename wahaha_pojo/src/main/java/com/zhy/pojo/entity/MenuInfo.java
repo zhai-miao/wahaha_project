@@ -25,7 +25,7 @@ public class MenuInfo extends BaseAuditable {
     private String menuName;
 
     @Column(name = "parentId")
-    private Long parentId;
+    private int parentId;
 
     @Column(name = "leval")
     private int leval;
