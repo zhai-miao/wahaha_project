@@ -152,7 +152,7 @@ public class RoleController {
     public int delRoleById(@RequestBody Map<String,Object>map){
         Long id = Long.valueOf(map.get("id").toString());
         System.out.println("要删除的ID是:"+id);
-        int x = roleService.delRoleById(id);
+        int x = roleService.delRoleById(id);        //删除权限的同时要删除中间表
         return 1;
     }
 }

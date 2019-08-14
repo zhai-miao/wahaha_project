@@ -40,7 +40,13 @@ public class UserService {
 
     public UserInfo getUserByLogin(String loginName){
         //获取用户信息
-        UserInfo byLoginName = userDao.findByLoginName(loginName);
+        UserInfo byLoginName02 = userDao.findByLoginName(loginName);
+        UserInfo byLoginName = new UserInfo();
+        byLoginName.setId(byLoginName02.getId());
+        byLoginName.setLoginName(byLoginName02.getLoginName());
+        byLoginName.setPassword(byLoginName02.getPassword());
+        byLoginName.setPhotoUrl(byLoginName02.getPhotoUrl());
+        byLoginName.setUserName(byLoginName02.getUserName());
         if(byLoginName!=null){
             //获取用户的角色信息
             RoleInfo roleInfoByUserId = roleDao.forRoleInfoByUserId(byLoginName.getId());

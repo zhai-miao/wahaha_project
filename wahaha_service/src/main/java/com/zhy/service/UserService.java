@@ -9,8 +9,10 @@ import com.zhy.pojo.entity.UserInfo;
 import com.zhy.utils.UID;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.Hashtable;
@@ -29,7 +31,8 @@ public class UserService {
     private MenuDao menuDao;
 
     public Page<UserInfo> getUserList(Integer currentPage,Integer pageSize){
-        Page<UserInfo> userList = userDao.findAll(PageRequest.of(currentPage-1, pageSize));
+        Page<UserInfo> userList = userDao.findAll(PageRequest.of(currentPage - 1, pageSize, Sort.by(Sort.Order.desc("delStatus"))));
+        //Page<UserInfo> userList = userDao.findAll(PageRequest.of(currentPage-1, pageSize));
         for (UserInfo userInfo: userList) {
             Long id = userInfo.getId();
             RoleInfo roleInfo = roleDao.selRoleByUid(id);
@@ -123,7 +126,15 @@ public class UserService {
         }
     }
 
-    public int delById(Long id) {
+    public int delByIdStatus(Long id) {       //逻辑删除
+        Long uid = Long.valueOf(id.toString());
+        UserInfo userInfo = userDao.findById(uid).get();
+        userInfo.setDelStatus(0);
+        userDao.save(userInfo);
+        return 1;
+    }
+
+    public int delById(Long id) {       //物理删除
         Long uid = Long.valueOf(id.toString());
         UserInfo userInfo = userDao.findById(uid).get();
         userDao.delete(userInfo);

@@ -58,6 +58,7 @@ public class UserController {
         String lcgPwd = MD5.encryptPassword(password, "lcg");
         user.setPassword(lcgPwd);
         Date date = new Date();
+        user.setCreateTime(date);
         user.setUpdateTime(date);
         int x = userService.addUser(user);
         imageUrl = null;
@@ -91,11 +92,11 @@ public class UserController {
     }
 
     @RequestMapping("delById")
-    public int delById(@RequestBody Map<String,Object>map){
-        if(map.get("id")!=null){
+    public int delById(@RequestBody Map<String,Object>map){     //通过ID进行逻辑删除
+        if(map.get("id")!=null ){
             Long id = Long.valueOf(map.get("id").toString());
             System.out.println("要删除的ID是:"+id);
-            int x = userService.delById(id);
+            int x = userService.delByIdStatus(id);
             return x;
         }
         if(map.get("ids")!=null){

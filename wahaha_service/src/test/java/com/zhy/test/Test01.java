@@ -1,11 +1,18 @@
 package com.zhy.test;
 
 import com.zhy.dao.MenuDao;
+import com.zhy.dao.RoleDao;
+import com.zhy.dao.UserDao;
 import com.zhy.pojo.entity.MenuInfo;
+import com.zhy.pojo.entity.RoleInfo;
+import com.zhy.pojo.entity.UserInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -15,6 +22,31 @@ import java.util.List;
 public class Test01 {
     @Autowired
     private MenuDao menuDao;
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private RoleDao roleDao;
+
+    @Test
+    public void test05(){
+        Page<UserInfo> userList = userDao.findAll(PageRequest.of(1, 5, Sort.by(Sort.Order.desc("id"))));
+        for (UserInfo userInfo: userList) {
+            Long id = userInfo.getId();
+            RoleInfo roleInfo = roleDao.selRoleByUid(id);
+            if(roleInfo!=null){
+                Long rid = roleInfo.getId();
+                List<MenuInfo> menuInfoList = menuDao.selMenuByRid(rid);
+                roleInfo.setMenuInfoList(menuInfoList);
+
+                userInfo.setRoleInfo(roleInfo);
+            }else {
+                continue;
+            }
+        }
+        for (UserInfo userInfo: userList) {
+            System.out.println(userInfo);
+        }
+    }
 
     @Test
     public void test03(){
