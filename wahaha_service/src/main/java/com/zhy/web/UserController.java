@@ -46,8 +46,9 @@ public class UserController {
     public Page<UserInfo> getMenuList(@RequestBody Map<String,Object> map){
         Integer pageSize = Integer.valueOf((Integer) map.get("pageSize"));
         Integer currentPage = Integer.valueOf((Integer) map.get("currentPage"));
+        Long userId = Long.valueOf(map.get("userId").toString());
         System.out.println("getMenuList方法..."+pageSize+","+currentPage);
-        Page<UserInfo> userList = userService.getUserList(currentPage,pageSize);
+        Page<UserInfo> userList = userService.getUserList(currentPage,pageSize,userId);
         return userList;
     }
 

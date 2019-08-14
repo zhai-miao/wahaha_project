@@ -30,7 +30,7 @@ public class UserService {
     @Autowired
     private MenuDao menuDao;
 
-    public Page<UserInfo> getUserList(Integer currentPage,Integer pageSize){
+    public Page<UserInfo> getUserList(Integer currentPage,Integer pageSize,Long userId){
         Page<UserInfo> userList = userDao.findAll(PageRequest.of(currentPage - 1, pageSize, Sort.by(Sort.Order.desc("delStatus"))));
         //Page<UserInfo> userList = userDao.findAll(PageRequest.of(currentPage-1, pageSize));
         for (UserInfo userInfo: userList) {
