@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Random;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -95,5 +96,11 @@ public class Test01 {
         }
 
         System.out.println(byLevalAndParentId);
+    }
+
+    @Test
+    public void verifyCode(){
+        String verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);
+        System.out.println("验证码:"+verifyCode);
     }
 }

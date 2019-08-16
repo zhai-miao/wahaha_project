@@ -29,4 +29,6 @@ public interface UserDao extends JpaRepository<UserInfo,Long> {
     @Query(value = "delete from base_user where id = ?1",nativeQuery = true)
     public void delByUidaa(Long uid);
 
+    @Query(value = "select * from base_user where loginName=?1",nativeQuery = true)
+    List<UserInfo> selectUserByName(String uname);
 }

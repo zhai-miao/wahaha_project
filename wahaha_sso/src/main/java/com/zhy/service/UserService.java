@@ -103,6 +103,36 @@ public class UserService {
         return 1;
     }
 
+    public UserInfo getUserByTel(String phoneTel) {     //因为是自己做，手机号也没辙唯一性，所以后台根据手机号的话只要第一个用户
+        UserInfo userInfo = userDao.findByPhone(phoneTel).get(0);
+        UserInfo byLoginName = new UserInfo();
+        byLoginName.setId(userInfo.getId());
+        byLoginName.setLoginName(userInfo.getLoginName());
+        byLoginName.setPassword(userInfo.getPassword());
+        byLoginName.setPhotoUrl(userInfo.getPhotoUrl());
+        byLoginName.setUserName(userInfo.getUserName());
+        if(byLoginName!=null){
+            //获取用户的角色信息
+            RoleInfo roleInfoByUserId = roleDao.forRoleInfoByUserId(byLoginName.getId());
+            //List<RoleInfo> list = null;
+            //设置用户的角色信息
+            //list.add(roleInfoByUserId);
+            byLoginName.setRoleInfo(roleInfoByUserId);
+
+            if(roleInfoByUserId!=null){
+                //获取用户的权限信息
+                List<MenuInfo> firstMenuInfo = menuDao.getFirstMenuInfo(roleInfoByUserId.getId(), 1);
+                //递归的查询子菜单权限
+                Map<String,String> authMap=new Hashtable<>();
+                this.getForMenuInfo(firstMenuInfo,roleInfoByUserId.getId(),authMap);
+                //设置菜单的子权限
+                byLoginName.setAuthmap(authMap);
+                byLoginName.setListMenuInfo(firstMenuInfo);
+            }
+        }
+        return byLoginName;
+    }
+
     /*public UserInfo getUserByUid(Integer uid) {       //自写的用户角色一对多的方法
         UserInfo userById = userDao.findById(uid);
         if(userById!=null){

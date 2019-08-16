@@ -230,4 +230,20 @@ public class UserService {
         UserInfo userInfo = userDao.findById(userId).get();
         return userInfo;
     }
+
+
+
+    public void addExcelUser(UserInfo user) {
+
+    }
+
+    public List<UserInfo> selectUserByName(String uname) {
+        List<UserInfo> listUser = userDao.selectUserByName(uname);
+        return listUser;
+    }
+
+    public Page<UserInfo> getUserListByExecel(Integer pageSize, Integer currentPage) {
+        Page<UserInfo> userList = userDao.findAll(PageRequest.of(currentPage - 1, pageSize));
+        return userList;
+    }
 }

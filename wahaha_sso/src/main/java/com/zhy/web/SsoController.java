@@ -48,7 +48,7 @@ public class SsoController {
                     String token = JWTUtils.generateToken(userInfo);
                     responseResult.setToken(token);
                     redisTemplate.opsForValue().set("USERINFO"+user.getId().toString(),token);
-                    redisTemplate.opsForHash().putAll("USERDATAAUTH"+user.getId().toString(),user.getAuthmap());
+                    redisTemplate.opsForHash().putAll("USERDATAAUTH"+user.getId(),user.getAuthmap());
                     redisTemplate.expire("USERINFO"+user.getId().toString(),30,TimeUnit.MINUTES);
                     responseResult.setResult(user);
                     responseResult.setCode(200);
