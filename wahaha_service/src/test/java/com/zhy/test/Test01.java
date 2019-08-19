@@ -6,6 +6,7 @@ import com.zhy.dao.UserDao;
 import com.zhy.pojo.entity.MenuInfo;
 import com.zhy.pojo.entity.RoleInfo;
 import com.zhy.pojo.entity.UserInfo;
+import com.zhy.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,16 @@ public class Test01 {
     private UserDao userDao;
     @Autowired
     private RoleDao roleDao;
+    @Autowired
+    private UserService userService;
 
 
     @Test
     public void findByIdAndLeval(){
         List<Long> menuIdByUid = userDao.getMenuIdByUid(1L);
-        List<MenuInfo> byIdAndLeval = menuDao.menuByIdAndLeval(menuIdByUid, 1);
-        System.out.println(byIdAndLeval);
+        //List<MenuInfo> byIdAndLeval = menuDao.menuByIdAndLeval(menuIdByUid, 1);
+        List<MenuInfo> menuInfoList = userService.byIdAndLevalAndParentId(menuIdByUid, 1, 0);
+        System.out.println(menuInfoList);
     }
 
     @Test

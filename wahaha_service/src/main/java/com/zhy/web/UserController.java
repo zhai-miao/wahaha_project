@@ -152,10 +152,10 @@ public class UserController {
     }
 
     @RequestMapping("getMenuList")
-    public MenuInfo getMenuListByUid(@RequestBody Map<String,Object> map){
+    public List<MenuInfo> getMenuListByUid(@RequestBody Map<String,Object> map){
         Long userid = Long.valueOf(map.get("userid").toString());
 
-        MenuInfo menuListByUid = userService.getMenuListByUid(userid);
+        List<MenuInfo> menuListByUid = userService.getMenuListByUid(userid);
         return menuListByUid;
 
         //List<MenuInfo> menuList = userService.getMenuList();      //所有的权限列表
