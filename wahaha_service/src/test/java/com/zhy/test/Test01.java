@@ -28,6 +28,14 @@ public class Test01 {
     @Autowired
     private RoleDao roleDao;
 
+
+    @Test
+    public void findByIdAndLeval(){
+        List<Long> menuIdByUid = userDao.getMenuIdByUid(1L);
+        List<MenuInfo> byIdAndLeval = menuDao.menuByIdAndLeval(menuIdByUid, 1);
+        System.out.println(byIdAndLeval);
+    }
+
     @Test
     public void test05(){
         Page<UserInfo> userList = userDao.findAll(PageRequest.of(1, 5, Sort.by(Sort.Order.desc("id"))));

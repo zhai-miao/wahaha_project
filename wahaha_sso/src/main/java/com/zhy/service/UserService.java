@@ -133,6 +133,17 @@ public class UserService {
         return byLoginName;
     }
 
+    public UserInfo checkEmail(String email, String loginName) {
+        UserInfo userInfo = userDao.findByLoginNameAndEmail(loginName, email);
+        System.out.println("返回的数据是:"+userInfo);
+        return userInfo;
+    }
+
+    public void udatePwd(String username, String lcgPwd) {
+        userDao.updatePwd(username, lcgPwd);
+
+    }
+
     /*public UserInfo getUserByUid(Integer uid) {       //自写的用户角色一对多的方法
         UserInfo userById = userDao.findById(uid);
         if(userById!=null){

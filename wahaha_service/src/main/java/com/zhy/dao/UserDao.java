@@ -31,4 +31,7 @@ public interface UserDao extends JpaRepository<UserInfo,Long> {
 
     @Query(value = "select * from base_user where loginName=?1",nativeQuery = true)
     List<UserInfo> selectUserByName(String uname);
+
+    @Query(value = "SELECT menuId FROM base_role_menu WHERE roleId = (SELECT roleId FROM base_user_role WHERE userId = ?1)",nativeQuery = true)
+    List<Long> getMenuIdByUid(Long userid);
 }

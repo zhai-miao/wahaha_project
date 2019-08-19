@@ -33,4 +33,10 @@ public interface MenuDao extends JpaRepository<MenuInfo,Long> {
     @Query(value = "DELETE FROM base_role_menu WHERE menuId = ?1",nativeQuery = true)
     public int deleteMenu(Long mid);
 
+    @Query(value = "SELECT * FROM base_menu WHERE id in (?1) and `leval` = ?2",nativeQuery = true)
+    public List<MenuInfo> menuByIdAndLeval(List<Long> menuId,int leval);
+
+    @Query(value = "SELECT * FROM base_menu WHERE id in (?1) and `leval` = ?2 and parentId = ?3",nativeQuery = true)
+    public List<MenuInfo> byIdAndLevalAndParentId(List<Long> menuId,int leval,int parentId);
+
 }

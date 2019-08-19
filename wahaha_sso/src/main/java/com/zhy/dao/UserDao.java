@@ -4,7 +4,9 @@ import com.zhy.pojo.entity.MenuInfo;
 import com.zhy.pojo.entity.RoleInfo;
 import com.zhy.pojo.entity.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,5 +31,12 @@ public interface UserDao extends JpaRepository<UserInfo,Long> {
 
     @Query(value = "SELECT * FROM base_user WHERE tel = ?1",nativeQuery = true)
     public List<UserInfo> findByPhone(String tel);
+
+    public UserInfo findByLoginNameAndEmail(String loginName,String email);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE base_user SET `password` = ?2 WHERE loginName = ?1",nativeQuery = true)
+    public void updatePwd(String username, String lcgPwd);
 
 }

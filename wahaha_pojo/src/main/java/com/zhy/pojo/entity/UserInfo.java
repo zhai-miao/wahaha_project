@@ -47,6 +47,10 @@ public class UserInfo extends BaseAuditable {
     @ApiModelProperty("用户的电话")
    private String tel;
 
+    @Column(name = "email")
+    @ApiModelProperty("用户的邮箱")
+    private String email;
+
     @Column(name = "createTime")
     @ApiModelProperty("用户创建时间")
     private Date createTime;

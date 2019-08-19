@@ -222,7 +222,6 @@ public class UserService {
         for (MenuInfo menuInfo: byLevalAndParentId) {
             List<MenuInfo> byLevalAndParentId1 = menuDao.findByLevalAndParentId(level + 1, menuInfo.getParentId());
             menuInfo.setMenuInfoList(byLevalAndParentId1);
-
         }
     }
 
@@ -246,4 +245,30 @@ public class UserService {
         Page<UserInfo> userList = userDao.findAll(PageRequest.of(currentPage - 1, pageSize));
         return userList;
     }
+
+    public MenuInfo getMenuListByUid(Long userid) {
+        List<Long> menuIdByUid = userDao.getMenuIdByUid(userid);
+        MenuInfo menuInfo = new MenuInfo();
+        /*for (int i = 1;;i++){
+            List<MenuInfo> byIdAndLeval = menuDao.menuByIdAndLeval(menuIdByUid, i);
+            for (MenuInfo menuInfo1: byIdAndLeval) {
+                int j = 2;
+                Long id = menuInfo.getId();
+                Integer parentId = Integer.valueOf(id.toString());
+            }
+            //List<MenuInfo> list = menuDao.findByLevalAndParentId(i, Integer.valueOf(parentCode.toString()));
+        }*/
+
+        return menuInfo;
+    }
+
+    public List<MenuInfo> byIdAndLevalAndParentId(List<Long> menuIdByUid,int leval,int parentId){
+        List<MenuInfo> menuInfoList = menuDao.byIdAndLevalAndParentId(menuIdByUid, leval, parentId);
+        menuInfoList.forEach(menuInfo -> {
+            List<MenuInfo> byLevalAndParentId1 = menuDao.byIdAndLevalAndParentId(menuIdByUid,leval + 1, Integer.valueOf(menuInfo.getId().toString()));
+            menuInfo.setMenuInfoList(byLevalAndParentId1);
+        });
+        return menuInfoList;
+    }
+
 }

@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -90,5 +93,65 @@ public class SsoController {
         response.addCookie(cookie);
 
         return responseResult;
+    }
+
+    @RequestMapping("getxLineData")
+    public Map<String,Object> getxLineData(@RequestBody Map<String,Object> map){
+        String[] arrNum = new String[7];
+        String[] arrDate = new String[7];
+        SimpleDateFormat sp=new SimpleDateFormat("yyyy-MM-dd");     //根据时间戳转为正常时间
+        String format = sp.format(new Date(System.currentTimeMillis()));    //当天的字符串
+        //如果当天没登录，可以设置一个一天更新一次的定时器，往List集合穿个空值，然后登陆次数减一，我没写 0_0
+        Integer userId = Integer.valueOf(map.get("userId").toString()); //前台登陆的用户的ID
+        //Date date = new Date();                                         //获取当前时间
+        //java.sql.Date sqlDate = new java.sql.Date(date.getTime());      //util格式的Date转为sql格式的Date
+        if(redisTemplate.opsForValue().get(format) == null){    //如果为空，则证明当天没添加过任何用户登陆的痕迹
+            redisTemplate.opsForValue().set(format,"1");        //当天登陆次数初始值为1
+            redisTemplate.expire(format,30,TimeUnit.DAYS); //存活时间为1天
+            for(int y = 0;y<arrNum.length;y++){                 //遍历最近5天的相关值
+                String format1 = redisTemplate.opsForValue().get(format);
+                arrNum[y] = format1;
+                arrDate[y] = format;
+                format = sp.format(new Date(System.currentTimeMillis()-1000*60*60*24*(y+1)));
+                System.out.println("数组是:"+arrNum[y]);
+                System.out.println("时间是:"+arrDate[y]);
+            }
+
+        }else {
+            if(redisTemplate.opsForValue().get(userId.toString()+format) == null){    //如果为空，证明该用户改天没登录过
+                redisTemplate.opsForValue().set(userId.toString()+format,"1");          //做个相当于当天已登陆的标识
+                redisTemplate.expire(userId.toString()+format,1,TimeUnit.DAYS); //存活时间为1天
+                Integer num = Integer.valueOf(redisTemplate.opsForValue().get(format)); //获取当天不同用户登陆的次数
+                num = num + 1;  //次数+1
+                redisTemplate.opsForValue().set(format,num.toString());  //当天的登陆次数加1
+
+                for(int y = 0;y<arrNum.length;y++){
+                    String format1 = redisTemplate.opsForValue().get(format);
+                    arrNum[y] = format1;
+                    arrDate[y] = format;
+                    format = sp.format(new Date(System.currentTimeMillis()-1000*60*60*24*(y+1)));
+                    System.out.println("数组是:"+arrNum[y]);
+                    System.out.println("时间是:"+arrDate[y]);
+                }
+
+            }else {
+                //该用户今天登录过
+                for(int y = 0;y<arrNum.length;y++){
+                    String format1 = redisTemplate.opsForValue().get(format);   //今天的时间，返回的是今天的值
+                    arrNum[y] = format1;
+                    arrDate[y] = format;
+                    format = sp.format(new Date(System.currentTimeMillis()-1000*60*60*24*(y+1)));
+                    System.out.println("数组是:"+arrNum[y]);
+                    System.out.println("时间是:"+arrDate[y]);
+                }
+
+            }
+
+        }
+
+        Map<String,Object> map02 = new HashMap<>();
+        map02.put("arrNum",arrNum);
+        map02.put("arrDate",arrDate);
+        return map02;
     }
 }
