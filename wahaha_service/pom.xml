@@ -55,7 +55,7 @@
         <dependency>
             <groupId>commons-beanutils</groupId>        <!--在字符串和各种类型数据间进行转换，还包括对数组的转换-->
             <artifactId>commons-beanutils</artifactId>
-            <version>1.8.3</version>
+            <version>1.9.2</version>
         </dependency>
 
         <!-- swagger start -->
